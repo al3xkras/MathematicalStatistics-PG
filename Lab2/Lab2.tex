@@ -1,0 +1,1028 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Project 2}
+    \vspace{5px}
+    \author{author: Alexander Krasovskiy}
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    \hypertarget{task-2.1-documentation}{%
+\subsubsection{Task 2.1 Documentation}\label{task-2.1-documentation}}
+
+    \hypertarget{data-source}{%
+\paragraph{1. Data Source:}\label{data-source}}
+
+\begin{itemize}
+\tightlist
+\item
+  The data source for the Task 2.1 is a generated random uniformly
+  distributed sample of size n (scipy.stats.uniform module is used)
+\item
+  Initial assumptions: X is a uniformly distributed sample with values in
+  range \([0,\theta]\) (where \(\theta\) is a model parameter)
+\end{itemize}
+
+    \hypertarget{research-purpose}{%
+\subparagraph{2. Research purpose: }\label{research-purpose}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Given samples:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  \(X \in \text{\{ X1, X2 , ..., X100 \}}\)
+\item
+  Sample size:
+  \(\small{\text{|X1| = 1000, |X2| = 2000, ... , |X100| = 100000}}\)
+\end{itemize}
+
+\vspace{15px}
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Given three statistics over a sample X:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Min(X) = \$\space\space X\_\{1:n\}\space\space  - \$ Sample X minimum
+\item
+  Mean(X) =
+  \(\space\space (X_{1:n}, X_{n:n})\space\space ---||--- \text{mean}\)
+\item
+  Max(X) = \(\space\space X_{n:n}\space\space ---||--- \text{maximum}\)
+\end{itemize}
+
+\vspace{15px}
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  \(\theta = 10\) (or any natural number)
+  \vspace{15px}
+\item
+  Null hypothesis, \(\text{H0}\):
+  \(\space\space X \text{ ~ } \textit{Unif }[0, \theta]\)
+  \vspace{15px}
+\item
+  Null hypothesis, \(\text{H0}\):
+  \(\textbf{Max(X)}\text{ is a sufficient statistics for the parameter }\theta\)
+  \vspace{15px}
+  \item
+  Alternative hypothesis, \(\text{H1}\):
+  \(\textbf{Mean(X)}\text{ is a sufficient statistics for the parameter }\theta\)
+\end{enumerate}
+\vspace{15px}
+\begin{itemize}
+  \tightlist
+  \item
+    Research purpose: Prove / decline the Null Hypothesis H0
+  \end{itemize}
+
+    \vspace{120px}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{48}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{theta} \PY{o}{=} \PY{l+m+mi}{10}
+\PY{c+c1}{\PYZsh{} Define sample (X) generator}
+\PY{k}{def} \PY{n+nf}{T}\PY{p}{(}\PY{n}{theta}\PY{p}{,} \PY{n}{sample\PYZus{}size}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{uniform}\PY{o}{.}\PY{n}{rvs}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{theta}\PY{p}{,}\PY{n}{sample\PYZus{}size}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{49}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}Define statistics functions}
+\PY{k}{def} \PY{n+nf}{Mean}\PY{p}{(}\PY{n}{sample}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{sample}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{Min}\PY{p}{(}\PY{n}{sample}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{sample}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}
+
+\PY{k}{def} \PY{n+nf}{Max}\PY{p}{(}\PY{n}{sample}\PY{p}{)}\PY{p}{:}
+    \PY{k}{return} \PY{n}{sample}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{classifier-numeric-variables}{%
+\subparagraph{3. Classifier \& numeric
+variables:}\label{classifier-numeric-variables}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Classifiers:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  \(\text{None}\)
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Numeric variables:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  \(\space\space X \text{ ~ } \textit{Unif }[0, \theta]\)
+\end{itemize}
+
+    \hypertarget{introduction-probability-distribution-analysis}{%
+\subparagraph{4. Introduction (Probability distribution
+analysis)}\label{introduction-probability-distribution-analysis}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The \(\small{\textbf{Kolmogorov-Smirnov}}\) test is used to confirm /
+  reject the Null hypothesis H0 (which assumes, that
+  \(\space\space X \text{ ~ } \textit{Unif }[0, \theta]\))
+\item
+  \(\text{In the example below I used a function scipy.stats.kstest that implements the}\small{\textbf{ Kolmogorov-Smirnov }}\text{test.}\)
+\item
+  A brief description of the solution:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  method: scipy.stats.kstest(rvs, cdf, args=(), N=20,
+  alternative=`two-sided', method=`auto')
+\item
+  reference:
+  https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kstest.html
+\item
+  Performs the (one-sample or two-sample) Kolmogorov-Smirnov test for
+  goodness of fit. The one-sample test compares the underlying
+  distribution F(x) of a sample against a given distribution G(x)
+  \(\textbf{(this option is used)}\). The two-sample test compares the
+  underlying distributions of two independent samples. Both tests are
+  valid only for continuous distributions.
+\item
+  parameters:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    rvs - random values \(\equiv X\)
+  \item
+    cdf - expected cumulative distribution function
+    \(\equiv \text{Unif}(0,\theta)\)
+  \item
+    N - sample size \(\equiv \text{size of } X\)
+  \item
+    If the sample comes from distribution \(F(x) \equiv cdf\), then
+    \(D_n\) converges to 0 almost surely in the limit when
+    \({\displaystyle n}\) goes to infinity.
+  \item
+    H0: \({\sqrt {n}}D_{n} \space\space\) converges to the Kolmogorov
+    distribution, which does not depend on \(F(x)\)
+  \end{itemize}
+\item
+  \(D_{n}=\sup _{x}|F_{n}(x)-F(x)|\)
+\end{itemize}
+
+\vspace{50px}
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{50}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k+kn}{import} \PY{n}{kstest}
+\PY{n}{Lambda} \PY{o}{=} \PY{l+m+mf}{0.05}
+
+\PY{n}{n} \PY{o}{=} \PY{l+m+mi}{100000}
+\PY{n}{test} \PY{o}{=} \PY{n}{kstest}\PY{p}{(}\PY{n}{T}\PY{p}{(}\PY{n}{theta}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{,}\PY{n}{uniform}\PY{o}{.}\PY{n}{cdf}\PY{p}{,} \PY{n}{N}\PY{o}{=}\PY{n}{n}\PY{p}{,} \PY{n}{args}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{theta}\PY{p}{)}\PY{p}{)}
+\PY{n}{s}\PY{p}{,} \PY{n}{p\PYZus{}value} \PY{o}{=} \PY{n}{test}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{sample size = }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{k}{n})
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{test}\PY{p}{)}
+\PY{k}{if} \PY{p}{(}\PY{n}{p\PYZus{}value}\PY{o}{\PYZgt{}}\PY{n}{Lambda}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{H0 for the Kolmogorov\PYZhy{}Smirnov test is correct, lambda = }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{ (}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+si}{\PYZpc{}\PYZpc{}}\PY{l+s+s2}{ percentile)}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{Lambda}\PY{p}{,}\PY{l+m+mi}{100}\PY{o}{\PYZhy{}}\PY{l+m+mi}{100}\PY{o}{*}\PY{n}{Lambda}\PY{p}{)}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The sample X distribution is likely to be equivalent to Unif[0,theta]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{k}{else}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{H0 for the Kolmogorov\PYZhy{}Smirnov test is not correct, lambda = }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{k}{Lambda})
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{X distribution is unlikely to be equivalent to Unif[0,theta]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+sample size = 100000
+KstestResult(statistic=0.0026661944797430337, pvalue=0.4750146065722749)
+
+H0 for the Kolmogorov-Smirnov test is correct, lambda = 0.050 (95\% percentile)
+
+The sample X distribution is likely to be equivalent to Unif[0,theta]
+    \end{Verbatim}
+
+    \begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  The \(\small{\textbf{Kolmogorov-Smirnov}}\) test is positive (95
+  percentile) =\textgreater{}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  H0 is correct =\textgreater{}
+\item
+  \text{X is a random sample with the distribution}
+  \equiv\text{Unif}(0,\theta)
+\end{itemize}
+
+    \begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Additionally, it is necessary to check, that the sample generated by T
+  is simple.
+\end{enumerate}
+\begin{itemize}
+\tightlist
+\item
+  Therefore we define a function isSimpleRandomSample(T, theta,
+  expected\_range, eps = \(10^{-5}\)) - check if a uniformly distributed
+  random variable T is a simple random sample given the expected range
+  {[}a,b{]}.
+
+  \begin{enumerate}
+  \def\labelenumi{\arabic{enumi}.}
+  \tightlist
+  \item
+    Calculate the expected mean and standard deviation of the
+    Uniform{[}a,b{]} distribution
+  \item
+    Iterate for each sample size =n min: \(10\), max: \(10^7\)
+  \item
+    For each sample size (=n): - Generate a random sample of size n -
+    Calculate {[}a\_iter,b\_iter{]} == {[}min(sample),max(sample){]} -
+    Compute p == P(x\(\lt\)a\_iter or x\(\gt\)b\_iter) - Calculate the
+    sample mean and standard deviation - In order to prove that T(n) is
+    a simple random sample, we need to check that the random variable
+    T(n) is not limited for the population {[}0,theta{]} - Therefore, it
+    is necessary and sufficient to check that lim(p)=0,
+    n-\textgreater inf for a given eps. - =\textgreater{} If abs(p)
+    \textless{} eps: T generates a simple random sample.
+
+    \begin{itemize}
+    \tightlist
+    \item
+      return True
+    \end{itemize}
+  \item
+    Else: - return False
+  \end{enumerate}
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{57}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{math} \PY{k+kn}{import} \PY{n}{sqrt}
+
+\PY{k}{def} \PY{n+nf}{isSimpleRandomSample}\PY{p}{(}\PY{n}{T}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{expected\PYZus{}range}\PY{p}{,} \PY{n}{eps}\PY{p}{)}\PY{p}{:}
+    \PY{n}{a\PYZus{}iter}\PY{o}{=}\PY{k+kc}{None}
+    \PY{n}{b\PYZus{}iter}\PY{o}{=}\PY{k+kc}{None}
+    \PY{n}{diff} \PY{o}{=} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{expected\PYZus{}range}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{expected\PYZus{}range}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+    \PY{n}{sample\PYZus{}sizes} \PY{o}{=} \PY{p}{[}\PY{n+nb}{int}\PY{p}{(}\PY{n}{x}\PY{p}{)} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{p}{[}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mf}{1e2}\PY{p}{,}\PY{l+m+mf}{1e3}\PY{p}{,}\PY{l+m+mf}{1e4}\PY{p}{,}\PY{l+m+mf}{1e5}\PY{p}{,}\PY{l+m+mf}{1e6}\PY{p}{,} \PY{l+m+mf}{1e7}\PY{p}{]}\PY{p}{]}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{expected range:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{expected\PYZus{}range}\PY{p}{)}
+    \PY{n}{expected\PYZus{}mean} \PY{o}{=} \PY{p}{(}\PY{n}{expected\PYZus{}range}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{expected\PYZus{}range}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{/}\PY{l+m+mi}{2}
+    \PY{n}{expected\PYZus{}std} \PY{o}{=} \PY{n}{sqrt}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{/}\PY{l+m+mi}{12} \PY{o}{*} \PY{p}{(}\PY{n}{expected\PYZus{}range}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{expected\PYZus{}range}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{expected mean:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{expected\PYZus{}mean}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{expected standard deviation:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{expected\PYZus{}std}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+    \PY{k}{for} \PY{n}{size} \PY{o+ow}{in} \PY{n}{sample\PYZus{}sizes}\PY{p}{:}
+        \PY{n}{samp} \PY{o}{=} \PY{n}{T}\PY{p}{(}\PY{n}{theta}\PY{p}{,} \PY{n}{size}\PY{p}{)}
+        \PY{n}{a\PYZus{}iter} \PY{o}{=} \PY{n}{samp}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}
+        \PY{n}{b\PYZus{}iter} \PY{o}{=} \PY{n}{samp}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)}
+        
+        \PY{n}{p} \PY{o}{=} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{a\PYZus{}iter}\PY{o}{\PYZhy{}}\PY{n}{expected\PYZus{}range}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{o}{/}\PY{n}{diff} \PY{o}{+} \PY{n+nb}{abs}\PY{p}{(}\PY{n}{b\PYZus{}iter}\PY{o}{\PYZhy{}}\PY{n}{expected\PYZus{}range}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{o}{/}\PY{n}{diff}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{for sample size = }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{:}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{k}{size})
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{p\PYZus{}value == P(x\PYZlt{}a\PYZus{}iter or x\PYZgt{}b\PYZus{}iter) = }\PY{l+s+si}{\PYZpc{}.8f}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{k}{p})
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{sample mean = E(X):}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{samp}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{sample standard deviation = sqrt(Var(X)):}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{samp}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{actual range: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{p}{[}\PY{n}{a\PYZus{}iter}\PY{p}{,}\PY{n}{b\PYZus{}iter}\PY{p}{]}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+        
+        \PY{k}{if} \PY{n}{p} \PY{o}{\PYZlt{}} \PY{n}{eps}\PY{p}{:}
+            \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Random sample is simple, eps=}\PY{l+s+si}{\PYZpc{}e}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{k}{eps})
+            \PY{k}{return} \PY{k+kc}{True}
+    \PY{k}{return} \PY{k+kc}{False}
+    
+\PY{n}{eps}\PY{o}{=}\PY{l+m+mf}{1e\PYZhy{}5}
+\PY{n}{population}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{theta}\PY{p}{]}
+
+\PY{k}{if} \PY{n}{isSimpleRandomSample}\PY{p}{(}\PY{n}{T}\PY{p}{,}\PY{n}{theta}\PY{p}{,}\PY{n}{population}\PY{p}{,} \PY{n}{eps}\PY{o}{=}\PY{n}{eps}\PY{p}{)}\PY{p}{:}
+    \PY{n}{success}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{T(n) generates a simple random sample for the expected population=}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s2}{, eps=}\PY{l+s+si}{\PYZpc{}e}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{population}\PY{p}{,}\PY{n}{eps}\PY{p}{)}\PY{p}{)}
+\PY{k}{else}\PY{p}{:}
+    \PY{n}{fail}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{T(n) does not generate a simple random sample for the expected population=}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s2}{, eps=}\PY{l+s+si}{\PYZpc{}e}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{population}\PY{p}{,}\PY{n}{eps}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+expected range: [0, 10]
+expected mean: 5.0
+expected standard deviation: 2.8867513459481287
+
+for sample size = 10:
+p\_value == P(x<a\_iter or x>b\_iter) = 0.10368617
+sample mean = E(X): 5.643999061499329
+sample standard deviation = sqrt(Var(X)): 2.871822291800391
+actual range:  [0.9269957357854164, 9.890134010618748]
+
+for sample size = 100:
+p\_value == P(x<a\_iter or x>b\_iter) = 0.00762663
+sample mean = E(X): 4.67245060952827
+sample standard deviation = sqrt(Var(X)): 3.058244597728054
+actual range:  [0.028974161437055335, 9.952707822710888]
+
+for sample size = 1000:
+p\_value == P(x<a\_iter or x>b\_iter) = 0.00154257
+sample mean = E(X): 4.990070772551295
+sample standard deviation = sqrt(Var(X)): 2.9470834430016635
+actual range:  [0.009418768815103729, 9.993993082600863]
+
+for sample size = 10000:
+p\_value == P(x<a\_iter or x>b\_iter) = 0.00020790
+sample mean = E(X): 5.0136269329335414
+sample standard deviation = sqrt(Var(X)): 2.9008435888900697
+actual range:  [0.001960486448134846, 9.999881494744043]
+
+for sample size = 100000:
+p\_value == P(x<a\_iter or x>b\_iter) = 0.00000881
+sample mean = E(X): 4.99221187269252
+sample standard deviation = sqrt(Var(X)): 2.8887436061886724
+actual range:  [2.3191380660314564e-05, 9.999935093523947]
+
+Random sample is simple, eps=1.000000e-05
+\textcolor{ansi-green-intense}{
+T(n) generates a simple random sample for the expected population=[0, 10],
+eps=1.000000e-05}
+    \end{Verbatim}
+
+    \vspace{190px}
+    \hypertarget{model-definition}{%
+\subparagraph{5. Model definition:}\label{model-definition}}
+
+ \((X,\{P_{\theta}, \theta \in \Theta\})\): \newline
+- X = \([ 0,\space \theta]\) \newline
+- \(\theta = 10\); \(\Theta = \mathbb{R}\) \newline
+- \(P_{\theta} \textit{ ~ Unif}\space(0, \theta)\) \newline
+
+Null hypothesis, \(\text{H0}\):
+\(\textbf{Max(X)}\text{ is a sufficient statistics for the parameter }\theta\)\newline\newline
+Alternative hypothesis, \(\text{H1}\):
+\(\textbf{Mean(X)}\text{ or }\textbf{Min(X)}\text{ is a sufficient statistics for the parameter }\theta\)
+
+\vspace{40px}
+    \hypertarget{analysis}{%
+\subparagraph{6. Analysis:}\label{analysis}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  First we define function for computing the mean squared error of
+  \(|\theta - S(X)|\)
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Where \(S(X)\) is a statistics function
+\item
+  The squared error is computer for every sample
+  \(X \in \text{\{ X1, X2 , ..., X100 \}}\): \(E_i = |\theta - T(X_i)|\)
+\item
+  =\textgreater{} The mean squared error is equal to
+  \(\space\frac{1}{n}(E_1 + E_2 + ... + E_{100}) = \text{MSE}\)
+\end{itemize}
+
+    Brief description of the function \textbf{error(theta, stat, T)}: \newline
+
+    1. Arg: \(\theta\) - estimated parameter \newline
+
+    2. Arg: \(T == T(\theta,n)\) - random sample generator \newline
+
+    3. Arg: \(\text{stat}\) - a reference to the statistics function over a sample T(theta, sample\_size) \newline
+    
+    4. for each sample size in range(1000,100000,1000): \newline
+    \space\space - Approximate \(\theta\) based on the random sample \(\text{stat}\)(T(theta,sample\_size)) \newline
+    \space\space - Compute the squared error between theta and theta approximation \newline
+    \space\space - Compute the mean squared error \(\text{MSE}\) \newline
+
+    5. Print results \& draw the error plot \newline\newline\newline
+
+    \vspace{230px}
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{67}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{error}\PY{p}{(}\PY{n}{theta}\PY{p}{,}\PY{n}{stat}\PY{p}{,} \PY{n}{T}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Theta =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{theta}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Theta estimator:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{stat}\PY{p}{)}
+    \PY{n}{mse} \PY{o}{=} \PY{l+m+mi}{0}
+    \PY{n}{error\PYZus{}arr}\PY{o}{=}\PY{p}{[}\PY{p}{]}
+    \PY{n}{sample\PYZus{}sizes}\PY{o}{=}\PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{,}\PY{l+m+mi}{101000}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)}
+    \PY{k}{for} \PY{n}{sample\PYZus{}size} \PY{o+ow}{in} \PY{n}{sample\PYZus{}sizes}\PY{p}{:}
+        \PY{n}{theta\PYZus{}appr} \PY{o}{=} \PY{n}{stat}\PY{p}{(}\PY{n}{T}\PY{p}{(}\PY{n}{theta}\PY{p}{,}\PY{n}{sample\PYZus{}size}\PY{p}{)}\PY{p}{)}
+        \PY{n}{sqe}\PY{o}{=}\PY{p}{(}\PY{n}{theta}\PY{o}{\PYZhy{}}\PY{n}{theta\PYZus{}appr}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+        \PY{n}{mse}\PY{o}{+}\PY{o}{=}\PY{n}{sqe}
+        \PY{n}{error\PYZus{}arr}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{sqe}\PY{p}{)}
+    \PY{n}{mse}\PY{o}{/}\PY{o}{=}\PY{n+nb}{len}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MSE:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{mse}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,}\PY{n}{error\PYZus{}arr}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{b}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{squared error}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{plt}\PY{o}{.}\PY{n}{axhline}\PY{p}{(}\PY{n}{mse}\PY{p}{,}\PY{n}{color}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{r}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mean squared error}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{k}{return} \PY{n}{mse}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{empirical-pdf-preview}{%
+\subparagraph{Empirical PDF Preview}\label{empirical-pdf-preview}}
+
+\begin{itemize}
+\tightlist
+\item
+  A method \$\small\{\textbf{plt.hist()}\} \$ is used for plotting the
+  empirical PDF
+\item
+  \$\small\{\textbf{density=True}\} \$ indicates that the histogram
+  represents a probability density function
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{68}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{T}\PY{p}{(}\PY{n}{theta}\PY{p}{,}\PY{l+m+mi}{10000}\PY{p}{)}\PY{p}{,}\PY{n}{bins}\PY{o}{=}\PY{l+m+mi}{50}\PY{p}{,}\PY{n}{density}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Empirical PDF function of sample X}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{gcf}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{set\PYZus{}size\PYZus{}inches}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Lab2_files/Lab2_18_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \vspace{80px}
+    \hypertarget{theta-estimation}{%
+\subparagraph{Theta estimation}\label{theta-estimation}}
+
+\begin{itemize}
+\tightlist
+\item
+  In the example below we use the \(\textbf{ error() }\) function
+  defined earlier for the \theta estimation process:
+\end{itemize}
+
+\vspace{20px}
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{71}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{gcf}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{set\PYZus{}size\PYZus{}inches}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mf}{2.5}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{sample size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{squared error}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{mse} \PY{o}{=} \PY{n}{error}\PY{p}{(}\PY{n}{theta}\PY{p}{,}\PY{n}{Max}\PY{p}{,} \PY{n}{T}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Theta estimation (the estimator is sufficient), error plot}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\PY{k}{if} \PY{p}{(}\PY{n}{mse}\PY{o}{\PYZlt{}}\PY{n}{Lambda}\PY{p}{)}\PY{p}{:}
+    \PY{n}{success}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The estimator }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s2}{ is sufficient.}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{k}{Max})
+\PY{k}{else}\PY{p}{:}
+    \PY{n}{fail}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The estimator }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s2}{ is not sufficient.}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{k}{Max})
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Theta = 10
+Theta estimator: <function Max at 0x000001F5E2675510>
+MSE: 5.81649238563254e-06
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Lab2_files/Lab2_20_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ansi-green-intense}{The estimator <function Max at 0x000001F5E2675510> is sufficient.}
+    \end{Verbatim}
+
+    \begin{itemize}
+
+\vspace{120px}
+\tightlist
+\item
+  \(\text{In the example below, } \theta \text{ is estimated using a different statistics function }- \small{\textbf{Mean(X)}}\)
+\end{itemize}
+\vspace{20px}
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{72}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{gcf}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{set\PYZus{}size\PYZus{}inches}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mf}{2.5}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{sample size}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{squared error}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{mse} \PY{o}{=} \PY{n}{error}\PY{p}{(}\PY{n}{theta}\PY{p}{,}\PY{n}{Mean}\PY{p}{,} \PY{n}{T}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Theta estimation (estimator is not sufficient), error plot}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\PY{k}{if} \PY{p}{(}\PY{n}{mse}\PY{o}{\PYZlt{}}\PY{n}{Lambda}\PY{p}{)}\PY{p}{:}
+    \PY{n}{success}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The estimator }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s2}{ is sufficient.}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{k}{Mean})
+\PY{k}{else}\PY{p}{:}
+    \PY{n}{fail}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The estimator }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s2}{ is not sufficient.}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{k}{Mean})
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Theta = 10
+Theta estimator: <function Mean at 0x000001F5E1EF15A0>
+MSE: 25.000415469126352
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Lab2_files/Lab2_22_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{ansi-red-intense}{The estimator <function Mean at 0x000001F5E1EF15A0> is not sufficient.}
+    \end{Verbatim}
+
+    \vspace{120px}
+    \hypertarget{conclusions}{%
+\subparagraph{7. Conclusions}\label{conclusions}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\vspace{15px}
+\tightlist
+\item
+  The Null hypothesis is true:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  \(\text{H0}\): \(\space X \text{ ~ } \textit{Unif }[0, \theta]\)
+
+  \vspace{15px}
+  \item
+  \(\text{H0}\):
+  \(\space\textbf{Max(X)}\equiv X_{n:n}\text{ is a sufficient statistics for the parameter }\theta\)
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\vspace{15px}
+\item
+  The \(\small{\textbf{Kolmogorov-Smirnov}}\) test confirmed, that the
+  distribution of sample X is equivalent to
+  \(\textit{Unif }[0, \theta]\) with p-value=0.05
+  \textless=\textgreater{} 95 percentile
+  \vspace{15px}
+\item
+  \(\textbf{Max(X)}\) \(\equiv X_{n:n}\) =\textgreater{} \(X_{n:n}\) is
+  a sufficient statistics function for the parameter \(\theta\)
+  \vspace{15px}
+  \item
+  Random sample generator \(T(\theta, n)\) generates simple random
+  samples for the distribution \(\textit{Unif }[0, \theta]\)
+  
+\vspace{15px}
+\item
+  Statistical Model:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  \((X,\{P_{\theta}, \theta \in \Theta\})\)
+
+  \begin{itemize}
+  \tightlist
+  \vspace{10px}
+  \item
+    X = \([ 0,\space \theta]\)
+    \vspace{5px}
+  \item
+    \(\theta = 10\); \(\Theta = \mathbb{R}\)
+    \vspace{5px}
+  \item
+    \(P_{\theta} \textit{ ~ Unif}\space(0, \theta)\)
+  \end{itemize}
+\end{itemize}
+
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
