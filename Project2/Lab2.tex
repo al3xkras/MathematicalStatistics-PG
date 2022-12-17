@@ -405,13 +405,13 @@
 \end{itemize}
 
     \hypertarget{research-purpose}{%
-\subparagraph{2. Research purpose: }\label{research-purpose}}
+\subparagraph{2. Research: }\label{research-purpose}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Given samples:
+  Test data (generated):
 \end{enumerate}
 
 \begin{itemize}
@@ -419,7 +419,7 @@
 \item
   \(X \in \text{\{ X1, X2 , ..., X100 \}}\)
 \item
-  Sample size:
+  Size of the generated data:
   \(\small{\text{|X1| = 1000, |X2| = 2000, ... , |X100| = 100000}}\)
 \end{itemize}
 
@@ -429,13 +429,13 @@
 \setcounter{enumi}{1}
 \tightlist
 \item
-  Given three statistics over a sample X:
+  Possible \(\theta\) estimators:
 \end{enumerate}
 
 \begin{itemize}
 \tightlist
 \item
-  Min(X) = \$\space\space X\_\{1:n\}\space\space  - \$ Sample X minimum
+  Min(X) = \(\space\space X_{1:n}\space\space\)  -  Sample X minimum
 \item
   Mean(X) =
   \(\space\space (X_{1:n}, X_{n:n})\space\space ---||--- \text{mean}\)
@@ -449,25 +449,22 @@
 \setcounter{enumi}{2}
 \tightlist
 \item
-  \(\theta = 10\) (or any natural number)
+  Parameter \(\theta = 10\) (or any natural number)
   \vspace{15px}
 \item
-  Null hypothesis, \(\text{H0}\):
-  \(\space\space X \text{ ~ } \textit{Unif }[0, \theta]\)
-  \vspace{15px}
-\item
-  Null hypothesis, \(\text{H0}\):
+  Expected test result:
   \(\textbf{Max(X)}\text{ is a sufficient statistics for the parameter }\theta\)
   \vspace{15px}
   \item
-  Alternative hypothesis, \(\text{H1}\):
-  \(\textbf{Mean(X)}\text{ is a sufficient statistics for the parameter }\theta\)
+  Alternative result:
+  \(\textbf{Mean(X)} \text{ or }\textbf{Min(X)}\text{ is a sufficient statistics for the parameter }\theta\)
 \end{enumerate}
 \vspace{15px}
 \begin{itemize}
   \tightlist
   \item
-    Research purpose: Prove / decline the Null Hypothesis H0
+    \(\text{Research purpose: check if the expected test result is correct}\newline\)
+    \(\text{(Show that }\textbf{ Max(x) }\text{is a sufficient estimator)}\)
   \end{itemize}
 
     \vspace{120px}
@@ -497,52 +494,21 @@
 \end{Verbatim}
 \end{tcolorbox}
 
-    \hypertarget{classifier-numeric-variables}{%
-\subparagraph{3. Classifier \& numeric
-variables:}\label{classifier-numeric-variables}}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Classifiers:
-\end{enumerate}
-
-\begin{itemize}
-\tightlist
-\item
-  \(\text{None}\)
-\end{itemize}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\setcounter{enumi}{1}
-\tightlist
-\item
-  Numeric variables:
-\end{enumerate}
-
-\begin{itemize}
-\tightlist
-\item
-  \(\space\space X \text{ ~ } \textit{Unif }[0, \theta]\)
-\end{itemize}
+    
 
     \hypertarget{introduction-probability-distribution-analysis}{%
-\subparagraph{4. Introduction (Probability distribution
-analysis)}\label{introduction-probability-distribution-analysis}}
+\subparagraph{4. Probability distribution
+analysis}\label{introduction-probability-distribution-analysis}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  The \(\small{\textbf{Kolmogorov-Smirnov}}\) test is used to confirm /
-  reject the Null hypothesis H0 (which assumes, that
-  \(\space\space X \text{ ~ } \textit{Unif }[0, \theta]\))
+  The \(\small{\textbf{Kolmogorov-Smirnov}}\) is a nonparametric test of the equality of continuous (or discontinuous), one-dimensional probability distributions that can be used to compare a sample with a reference probability distribution (one-sample K–S test), or to compare two samples (two-sample K–S test). In essence, the test answers the question "What is the probability that this collection of samples could have been drawn from that probability distribution?"
 \item
-  \(\text{In the example below I used a function scipy.stats.kstest that implements the}\small{\textbf{ Kolmogorov-Smirnov }}\text{test.}\)
+  \(\text{The solution depends on a function scipy.stats.kstest that implements the}\small{\textbf{ Kolmogorov-Smirnov }}\text{test.}\)
 \item
-  A brief description of the solution:
+  A brief description of the Kolmogorov-Smirnov test:
 \end{enumerate}
 
 \begin{itemize}
@@ -576,26 +542,25 @@ analysis)}\label{introduction-probability-distribution-analysis}}
     If the sample comes from distribution \(F(x) \equiv cdf\), then
     \(D_n\) converges to 0 almost surely in the limit when
     \({\displaystyle n}\) goes to infinity.
-  \item
-    H0: \({\sqrt {n}}D_{n} \space\space\) converges to the Kolmogorov
-    distribution, which does not depend on \(F(x)\)
   \end{itemize}
-\item
-  \(D_{n}=\sup _{x}|F_{n}(x)-F(x)|\)
+  \item
+  Let \(D_{n}=\sup _{x}|F_{n}(x)-F(x)|\)
+  \item
+  H0 (K-S Test): \({\sqrt {n}}D_{n} \space\space\) converges to the Kolmogorov
+  distribution, which does not depend on the empirical CDF \(F(x)\)
+
 \end{itemize}
 
-\vspace{50px}
+\vspace{80px}
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{50}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k+kn}{import} \PY{n}{kstest}
 \PY{n}{Lambda} \PY{o}{=} \PY{l+m+mf}{0.05}
-
 \PY{n}{n} \PY{o}{=} \PY{l+m+mi}{100000}
 \PY{n}{test} \PY{o}{=} \PY{n}{kstest}\PY{p}{(}\PY{n}{T}\PY{p}{(}\PY{n}{theta}\PY{p}{,}\PY{n}{n}\PY{p}{)}\PY{p}{,}\PY{n}{uniform}\PY{o}{.}\PY{n}{cdf}\PY{p}{,} \PY{n}{N}\PY{o}{=}\PY{n}{n}\PY{p}{,} \PY{n}{args}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{theta}\PY{p}{)}\PY{p}{)}
 \PY{n}{s}\PY{p}{,} \PY{n}{p\PYZus{}value} \PY{o}{=} \PY{n}{test}
 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{sample size = }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{k}{n})
-\PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
 \PY{n+nb}{print}\PY{p}{(}\PY{n}{test}\PY{p}{)}
 \PY{k}{if} \PY{p}{(}\PY{n}{p\PYZus{}value}\PY{o}{\PYZgt{}}\PY{n}{Lambda}\PY{p}{)}\PY{p}{:}
     \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
@@ -612,9 +577,9 @@ analysis)}\label{introduction-probability-distribution-analysis}}
 sample size = 100000
 KstestResult(statistic=0.0026661944797430337, pvalue=0.4750146065722749)
 
-H0 for the Kolmogorov-Smirnov test is correct, lambda = 0.050 (95\% percentile)
+The Kolmogorov-Smirnov test H0 is correct, lambda = 0.050 (95 percentile)
 
-The sample X distribution is likely to be equivalent to Unif[0,theta]
+The sample X distribution is equivalent to Unif[0,theta] with probability >= 95\%
     \end{Verbatim}
 
     \begin{enumerate}
@@ -622,17 +587,14 @@ The sample X distribution is likely to be equivalent to Unif[0,theta]
 \setcounter{enumi}{3}
 \tightlist
 \item
-  The \(\small{\textbf{Kolmogorov-Smirnov}}\) test is positive (95
-  percentile) =\textgreater{}
-\end{enumerate}
+As expected, the p-value of 0.47 is not below our threshold of 0.05, so we cannot reject the null hypothesis.  
+=>\end{enumerate}
 
 \begin{itemize}
 \tightlist
 \item
-  H0 is correct =\textgreater{}
-\item
   \text{X is a random sample with the distribution}
-  \equiv\text{Unif}(0,\theta)
+  = \text{Unif}(0,\theta) \text{ with a probability >= 95\%}
 \end{itemize}
 
     \begin{enumerate}
@@ -646,9 +608,9 @@ The sample X distribution is likely to be equivalent to Unif[0,theta]
 \begin{itemize}
 \tightlist
 \item
-  Therefore we define a function isSimpleRandomSample(T, theta,
-  expected\_range, eps = \(10^{-5}\)) - check if a uniformly distributed
-  random variable T is a simple random sample given the expected range
+  function isSimpleRandomSample(T, theta,
+  expected\_range, eps = \(10^{-5}\)) - to check if a uniformly distributed
+  random variable T is a simple random sample for the expected range
   {[}a,b{]}.
 
   \begin{enumerate}
@@ -660,21 +622,32 @@ The sample X distribution is likely to be equivalent to Unif[0,theta]
   \item
     Iterate for each sample size =n min: \(10\), max: \(10^7\)
   \item
-    For each sample size (=n): - Generate a random sample of size n -
-    Calculate {[}a\_iter,b\_iter{]} == {[}min(sample),max(sample){]} -
-    Compute p == P(x\(\lt\)a\_iter or x\(\gt\)b\_iter) - Calculate the
-    sample mean and standard deviation - In order to prove that T(n) is
-    a simple random sample, we need to check that the random variable
-    T(n) is not limited for the population {[}0,theta{]} - Therefore, it
-    is necessary and sufficient to check that lim(p)=0,
-    n-\textgreater inf for a given eps. - =\textgreater{} If abs(p)
-    \textless{} eps: T generates a simple random sample.
 
+  For each sample size (=n):   
+  \begin{itemize}
+    \tightlist
+    \item
+    Generate a random sample of size n 
+    \item
+    Calculate {[}a\_iter,b\_iter{]} == {[}min(sample),max(sample){]} 
+    \item
+    Compute p == P(x\(\lt\)a\_iter or x\(\gt\)b\_iter) 
+    \item
+    Calculate the sample mean and standard deviation 
+    \item
+    In order to prove that T(n) is a simple random sample, we need to check that the random variable T(n) is not limited for the population {[}0,theta{]} 
+    \item
+    Therefore, it is necessary and sufficient to check that lim(p)=0, n-\textgreater inf for a given eps. 
+    \item
+    =\textgreater{} If abs(p) \textless{} eps: T generates a simple random sample.
+    
     \begin{itemize}
     \tightlist
     \item
       return True
     \end{itemize}
+    
+  \end{itemize}
   \item
     Else: - return False
   \end{enumerate}
@@ -772,22 +745,18 @@ eps=1.000000e-05}
  \((X,\{P_{\theta}, \theta \in \Theta\})\): \newline
 - X = \([ 0,\space \theta]\) \newline
 - \(\theta = 10\); \(\Theta = \mathbb{R}\) \newline
-- \(P_{\theta} \textit{ ~ Unif}\space(0, \theta)\) \newline
+- \(P_{\theta} \equiv \textit{Unif}\space(0, \theta)\) \newline
 
-Null hypothesis, \(\text{H0}\):
-\(\textbf{Max(X)}\text{ is a sufficient statistics for the parameter }\theta\)\newline\newline
-Alternative hypothesis, \(\text{H1}\):
-\(\textbf{Mean(X)}\text{ or }\textbf{Min(X)}\text{ is a sufficient statistics for the parameter }\theta\)
 
 \vspace{40px}
     \hypertarget{analysis}{%
-\subparagraph{6. Analysis:}\label{analysis}}
+\subparagraph{6. Analysis (\(\theta\) estimation):}\label{analysis}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  First we define function for computing the mean squared error of
+  Compute the mean squared error of
   \(|\theta - S(X)|\)
 \end{enumerate}
 
@@ -809,13 +778,18 @@ Alternative hypothesis, \(\text{H1}\):
 
     2. Arg: \(T == T(\theta,n)\) - random sample generator \newline
 
-    3. Arg: \(\text{stat}\) - a reference to the statistics function over a sample T(theta, sample\_size) \newline
+    3. Arg: \(\textit{stat}\) - a reference to the statistics function of a sample T(\(\theta\), \text{sample size}) \newline
     
-    4. for each sample size in range(1000,100000,1000): \newline
-    \space\space - Approximate \(\theta\) based on the random sample \(\text{stat}\)(T(theta,sample\_size)) \newline
-    \space\space - Compute the squared error between theta and theta approximation \newline
-    \space\space - Compute the mean squared error \(\text{MSE}\) \newline
-
+    4. for each sample size in range(1000,100000, with step 1000): \newline
+    \begin{itemize}
+      \tightlist
+    \item
+      \space\space Approximate \(\theta\) based on the random sample \(\textit{stat}\)(T(\(\theta\),\text{ sample size})) \newline
+    \item
+      \space\space Compute the squared error between theta and theta approximation \newline
+    \item
+      \space\space Compute the mean squared error \(\text{MSE}\) \newline
+    \end{itemize}
     5. Print results \& draw the error plot \newline\newline\newline
 
     \vspace{230px}
@@ -847,10 +821,10 @@ Alternative hypothesis, \(\text{H1}\):
 \begin{itemize}
 \tightlist
 \item
-  A method \$\small\{\textbf{plt.hist()}\} \$ is used for plotting the
+  A method \small\textbf{plt.hist()}  is used for plotting the
   empirical PDF
 \item
-  \$\small\{\textbf{density=True}\} \$ indicates that the histogram
+  \small\textbf{density=True}  indicates that the histogram
   represents a probability density function
 \end{itemize}
 
@@ -876,8 +850,8 @@ Alternative hypothesis, \(\text{H1}\):
 \begin{itemize}
 \tightlist
 \item
-  In the example below we use the \(\textbf{ error() }\) function
-  defined earlier for the \theta estimation process:
+  In the example below, \(\textbf{ error() }\) function is used
+  for computing the \(\theta\) estimation MSE (and the SE for each sample size):
 \end{itemize}
 
 \vspace{20px}
@@ -918,7 +892,7 @@ MSE: 5.81649238563254e-06
 \vspace{120px}
 \tightlist
 \item
-  \(\text{In the example below, } \theta \text{ is estimated using a different statistics function }- \small{\textbf{Mean(X)}}\)
+  \(\text{To illustrate the difference between consistent and incinsistent estimators, } \theta \newline \text{ is estimated with a different statistics function }- \small{\textbf{Mean(X)}}, \text{which is not consistent}\)
 \end{itemize}
 \vspace{20px}
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -961,39 +935,36 @@ MSE: 25.000415469126352
 \def\labelenumi{\arabic{enumi}.}
 \vspace{15px}
 \tightlist
-\item
-  The Null hypothesis is true:
+\item 
+  Sample distribution analysis conclusions:
 \end{enumerate}
 
 \begin{itemize}
 \tightlist
 \item
-  \(\text{H0}\): \(\space X \text{ ~ } \textit{Unif }[0, \theta]\)
+  \(\space X \equiv \textit{Unif }[0, \theta]\)
 
-  \vspace{15px}
-  \item
-  \(\text{H0}\):
-  \(\space\textbf{Max(X)}\equiv X_{n:n}\text{ is a sufficient statistics for the parameter }\theta\)
-\end{itemize}
+  \end{itemize}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \setcounter{enumi}{1}
 \tightlist
-\vspace{15px}
+\vspace{10px}
+  \item
+  \(\text{H0}\):
+  \(\space\textbf{Max(X)}\equiv X_{n:n}\text{ is a sufficient statistics for the parameter} \newline \text{(Max(X) is asymptotically normal for the parameter theta, because the}\newline\text{ SE (standard error)} \xrightarrow{} 0, n\xrightarrow{}\infty\newline\text{as shown using the function error())}\)
+
+  \vspace{10px}
 \item
-  The \(\small{\textbf{Kolmogorov-Smirnov}}\) test confirmed, that the
-  distribution of sample X is equivalent to
-  \(\textit{Unif }[0, \theta]\) with p-value=0.05
-  \textless=\textgreater{} 95 percentile
+  It is not possible to reject the \(\small{\textbf{Kolmogorov-Smirnov}}\) test H0, which
+  states that the empirical CDF of X does not come from a family of Uniform distribution:
+  \(\textit{Unif }[0, \theta]\), p-value=0.05
   \vspace{15px}
-\item
-  \(\textbf{Max(X)}\) \(\equiv X_{n:n}\) =\textgreater{} \(X_{n:n}\) is
-  a sufficient statistics function for the parameter \(\theta\)
-  \vspace{15px}
+
   \item
   Random sample generator \(T(\theta, n)\) generates simple random
-  samples for the distribution \(\textit{Unif }[0, \theta]\)
+  samples, that have distribution equivalent to \(\textit{Unif }[0, \theta]\)
   
 \vspace{15px}
 \item
@@ -1015,7 +986,7 @@ MSE: 25.000415469126352
     \(\theta = 10\); \(\Theta = \mathbb{R}\)
     \vspace{5px}
   \item
-    \(P_{\theta} \textit{ ~ Unif}\space(0, \theta)\)
+    \(P_{\theta} \equiv \textit{ Unif}\space(0, \theta)\)
   \end{itemize}
 \end{itemize}
 
